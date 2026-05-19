@@ -19,13 +19,13 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "https://your-admin.vercel.app",
-      "https://your-user.vercel.app",
+      "http://localhost:3000",   // local admin
+      "http://localhost:3001",   // local user
+      "https://e-commerce-navy-psi-10.vercel.app", // deployed admin
+      "https://e-commerce-uqti.vercel.app"         // deployed user
     ],
     credentials: true,
-  }),
+  })
 );
 
 app.use(express.json());
