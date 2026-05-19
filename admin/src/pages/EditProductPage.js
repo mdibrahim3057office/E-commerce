@@ -6,6 +6,7 @@ import { updateProduct, fetchProducts } from "../features/product/productSlice";
 import ProductForm from "../components/ProductForm";
 import AdminNavbar from "../components/AdminNavbar";
 import { Container } from "@mui/material";
+import { logout } from "../features/auth/authSlice";
 
 const EditProductPage = () => {
   const { id } = useParams();
@@ -30,9 +31,14 @@ const EditProductPage = () => {
     navigate("/products"); // back to list
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <>
-      <AdminNavbar />
+      <AdminNavbar onLogout={handleLogout} />
       <Container maxWidth="lg" sx={{ mt: 3 }}>
         {status === "loading" ? (
           <p>Loading product...</p>

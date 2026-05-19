@@ -4,11 +4,11 @@ import Product from "../../models/Product.js";
 export const getProducts = async (req, res) => {
   try {
     const { page = 1, limit = 10, search = "", minPrice, maxPrice } = req.query;
-
+    console.log('req.query', req.query)
     // Build query object
     const query = {};
     if (search) {
-      query.name = { $regex: search, $options: "i" }; // case-insensitive search
+      query.title = { $regex: search, $options: "i" }; // case-insensitive search
     }
     if (minPrice || maxPrice) {
       query.price = {};

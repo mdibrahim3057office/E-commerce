@@ -6,6 +6,7 @@ import ProductForm from "../components/ProductForm";
 import AdminNavbar from "../components/AdminNavbar";
 import { useNavigate } from "react-router-dom";
 import { Container } from "@mui/material";
+import { logout } from "../features/auth/authSlice";
 
 const AddProductPage = () => {
   const dispatch = useDispatch();
@@ -19,9 +20,14 @@ const AddProductPage = () => {
     navigate("/products");
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <>
-      <AdminNavbar />
+      <AdminNavbar onLogout={handleLogout} />
       <Container maxWidth="lg" sx={{ mt: 3 }}>
         <div className="product-manager">
           <ProductForm onSubmit={handleAdd} />

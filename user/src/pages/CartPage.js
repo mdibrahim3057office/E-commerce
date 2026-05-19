@@ -15,11 +15,13 @@ import {
   Paper,
   Divider,
 } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
+
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { logout } from "../features/auth/authSlice";
 import UserNavbar from "../components/UserNavbar";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -28,7 +30,9 @@ export default function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { items } = useSelector((state) => state.cart);
+  const cart = useSelector((state) => state.cart);
+
+  const items = cart?.items || [];
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -58,6 +62,11 @@ export default function CartPage() {
     dispatch(removeCartItem({ productId }));
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   const total = items.reduce(
     (sum, item) => sum + item.productId.sellingPrice * item.quantity,
     0,
@@ -65,14 +74,18 @@ export default function CartPage() {
 
   return (
     <>
-      <UserNavbar />
-      <Container
-        maxWidth="lg"
-        sx={{
-          py: 5,
-        }}
-      >
-        <Typography variant="h4" fontWeight={700} mb={4}>
+      <UserNavbar onLogout={handleLogout} />
+
+      <Container maxWidth="lg" sx={{ py: 5 }}>
+        {/* Heading */}
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 700,
+            mb: 4,
+            color: "#111827",
+          }}
+        >
           Shopping Cart
         </Typography>
 
@@ -89,23 +102,24 @@ export default function CartPage() {
         >
           {/* LEFT SIDE */}
           <Box display="flex" flexDirection="column" gap={2}>
-            {items.map((item) => (
+            {items?.map((item) => (
               <Paper
                 key={item.productId._id}
-                elevation={1}
+                elevation={0}
                 sx={{
-                  p: 2,
-                  borderRadius: 3,
+                  p: 2.5,
+                  borderRadius: "20px",
+                  border: "1px solid #e5e7eb",
                 }}
               >
                 <Box
                   sx={{
                     display: "flex",
-                    gap: 2,
-                    alignItems: "flex-start",
+                    gap: 3,
+                    alignItems: "center",
                   }}
                 >
-                  {/* LEFT - IMAGE */}
+                  {/* IMAGE */}
                   <Box
                     component="img"
                     src={
@@ -118,65 +132,63 @@ export default function CartPage() {
                       width: 120,
                       height: 120,
                       objectFit: "cover",
-                      borderRadius: 2,
-                      border: "1px solid #eee",
-                      flexShrink: 0,
+                      borderRadius: "16px",
+                      border: "1px solid #f1f5f9",
+                      backgroundColor: "#f8fafc",
                     }}
                   />
 
-                  {/* RIGHT - DETAILS */}
+                  {/* DETAILS */}
                   <Box
                     sx={{
                       flex: 1,
                       display: "flex",
-                      flexDirection: "column",
                       justifyContent: "space-between",
-                      minHeight: 120,
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: 2,
                     }}
                   >
-                    {/* TOP */}
+                    {/* LEFT CONTENT */}
                     <Box>
-                      <Typography variant="h6" fontWeight={600}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 700,
+                          color: "#111827",
+                          mb: 0.5,
+                        }}
+                      >
                         {item.productId.title}
                       </Typography>
 
                       <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        mt={0.5}
+                        sx={{
+                          color: "#6b7280",
+                          fontSize: "15px",
+                        }}
                       >
                         ₹{item.productId.sellingPrice}
                       </Typography>
-                    </Box>
 
-                    {/* BOTTOM */}
-                    <Box
-                      display="flex"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      mt={2}
-                      flexWrap="wrap"
-                      gap={2}
-                    >
                       {/* Quantity */}
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          border: "1px solid #ddd",
-                          borderRadius: 2,
-                          px: 0.5,
-                          height: 36,
-                          width: 80,
+                          border: "1px solid #e5e7eb",
+                          borderRadius: "12px",
+                          width: "fit-content",
+                          mt: 2,
+                          overflow: "hidden",
                         }}
                       >
                         <IconButton
                           size="small"
                           onClick={() => handleDecrease(item)}
                           sx={{
-                            p: 0.5,
-                            width: 28,
-                            height: 28,
+                            borderRadius: 0,
+                            px: 1,
                           }}
                         >
                           <RemoveIcon fontSize="small" />
@@ -184,10 +196,9 @@ export default function CartPage() {
 
                         <Typography
                           sx={{
-                            minWidth: 24,
-                            textAlign: "center",
-                            fontWeight: 600,
-                            fontSize: 14,
+                            px: 2,
+                            fontWeight: 700,
+                            fontSize: "15px",
                           }}
                         >
                           {item.quantity}
@@ -197,39 +208,50 @@ export default function CartPage() {
                           size="small"
                           onClick={() => handleIncrease(item)}
                           sx={{
-                            p: 0.5,
-                            width: 28,
-                            height: 28,
+                            borderRadius: 0,
+                            px: 1,
                           }}
                         >
                           <AddIcon fontSize="small" />
                         </IconButton>
                       </Box>
+                    </Box>
 
-                      {/* Right actions */}
-                      <Box display="flex" alignItems="center" gap={1.5}>
-                        <Typography
-                          variant="h6"
-                          fontWeight={700}
-                          color="success.main"
-                        >
-                          ₹{item.productId.sellingPrice * item.quantity}
-                        </Typography>
+                    {/* RIGHT CONTENT */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-end",
+                        gap: 2,
+                      }}
+                    >
+                      {/* Total */}
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          fontWeight: 700,
+                          color: "#7c3aed",
+                        }}
+                      >
+                        ₹{item.productId.sellingPrice * item.quantity}
+                      </Typography>
 
-                        <Button
-                          color="error"
-                          size="small"
-                          startIcon={<DeleteIcon />}
-                          onClick={() => handleRemove(item.productId._id)}
-                          sx={{
-                            whiteSpace: "nowrap",
-                            minWidth: "auto",
-                            px: 1,
-                          }}
-                        >
-                          Remove
-                        </Button>
-                      </Box>
+                      {/* Delete Icon */}
+                      <IconButton
+                        onClick={() => handleRemove(item.productId._id)}
+                        sx={{
+                          border: "1px solid #fee2e2",
+                          color: "#dc2626",
+                          borderRadius: "12px",
+
+                          "&:hover": {
+                            backgroundColor: "#fee2e2",
+                          },
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     </Box>
                   </Box>
                 </Box>
@@ -239,22 +261,48 @@ export default function CartPage() {
 
           {/* RIGHT SIDE */}
           <Paper
-            elevation={2}
+            elevation={0}
             sx={{
-              p: 3,
-              borderRadius: 3,
+              p: 4,
+              borderRadius: "20px",
+              border: "1px solid #e5e7eb",
               position: "sticky",
               top: 20,
             }}
           >
-            <Typography variant="h6" fontWeight={700} mb={3}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                mb: 3,
+                color: "#111827",
+              }}
+            >
               Order Summary
             </Typography>
 
-            <Box display="flex" justifyContent="space-between" mb={2}>
-              <Typography>Total</Typography>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={3}
+            >
+              <Typography
+                sx={{
+                  color: "#6b7280",
+                  fontSize: "16px",
+                }}
+              >
+                Total
+              </Typography>
 
-              <Typography variant="h5" fontWeight={700} color="success.main">
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: 700,
+                  color: "#7c3aed",
+                }}
+              >
                 ₹{total}
               </Typography>
             </Box>
@@ -265,14 +313,19 @@ export default function CartPage() {
               fullWidth
               variant="contained"
               size="large"
-              color="success"
+              onClick={() => navigate("/checkout")}
               sx={{
                 py: 1.5,
-                borderRadius: 2,
+                borderRadius: "14px",
                 textTransform: "none",
-                fontWeight: 600,
+                fontWeight: 700,
+                fontSize: "15px",
+                background: "linear-gradient(90deg, #6d28d9, #a855f7)",
+
+                "&:hover": {
+                  background: "linear-gradient(90deg, #5b21b6, #9333ea)",
+                },
               }}
-              onClick={() => navigate("/checkout")}
             >
               Proceed to Checkout
             </Button>

@@ -4,6 +4,14 @@ import { useForm } from "react-hook-form";
 import { loginAdmin } from "../features/auth/authSlice";
 import "../styles/AdminLogin.scss";
 import { useNavigate } from "react-router-dom";
+import {
+  Grid,
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 
 const AdminLogin = () => {
   const dispatch = useDispatch();
@@ -24,42 +32,95 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h2>Admin Login</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              {...register("email", { required: "Email is required" })}
-              placeholder="Enter your email"
-            />
-            {errors.email && (
-              <span className="error">{errors.email.message}</span>
-            )}
-          </div>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        backgroundImage: 'url("/images/login-bg.jpg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Left side: Login form */}
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          // Glassmorphism effect
+          backdropFilter: "blur(6px)",
+          bgcolor: "rgba(255, 255, 255, 0.6)",
+        }}
+      >
+        <Container maxWidth="sm">
+          <Box
+            sx={{
+              p: 4,
+              borderRadius: 3,
+              boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+              bgcolor: "rgba(255,255,255,0.85)",
+            }}
+          >
+            <Typography
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{ fontWeight: "bold", color: "#b77ed8" }}
+            >
+              Admin Login
+            </Typography>
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              {...register("password", { required: "Password is required" })}
-              placeholder="Enter your password"
-            />
-            {errors.password && (
-              <span className="error">{errors.password.message}</span>
-            )}
-          </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <TextField
+                label="Email"
+                type="email"
+                fullWidth
+                margin="normal"
+                {...register("email", { required: "Email is required" })}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
 
-          <button type="submit" disabled={status === "loading"}>
-            {status === "loading" ? "Logging in..." : "Login"}
-          </button>
+              <TextField
+                label="Password"
+                type="password"
+                fullWidth
+                margin="normal"
+                {...register("password", { required: "Password is required" })}
+                error={!!errors.password}
+                helperText={errors.password?.message}
+              />
 
-          {error && <p className="error">{error}</p>}
-        </form>
-      </div>
-    </div>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                sx={{
+                  mt: 3,
+                  py: 1.2,
+                  fontWeight: "bold",
+                  borderRadius: 2,
+                  background: "linear-gradient(90deg, #6a11cb, #b77ed8)",
+                }}
+                disabled={status === "loading"}
+              >
+                {status === "loading" ? "Logging in..." : "Login"}
+              </Button>
+
+              {error && (
+                <Typography color="error" align="center" sx={{ mt: 2 }}>
+                  {error}
+                </Typography>
+              )}
+            </form>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Right side: Empty flex area showing background image */}
+      <Box sx={{ flex: 1 }} />
+    </Box>
   );
 };
 

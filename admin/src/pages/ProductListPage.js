@@ -6,6 +6,7 @@ import ProductList from "../components/ProductList";
 import AdminNavbar from "../components/AdminNavbar";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../features/auth/authSlice";
 
 const ProductListPage = () => {
   const dispatch = useDispatch();
@@ -23,9 +24,14 @@ const ProductListPage = () => {
     navigate(`/products/edit/${product._id}`);
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <>
-      <AdminNavbar />
+      <AdminNavbar onLogout={handleLogout} />
       <Container maxWidth="lg" sx={{ mt: 3 }}>
         <div className="product-manager">
           {status === "loading" ? (

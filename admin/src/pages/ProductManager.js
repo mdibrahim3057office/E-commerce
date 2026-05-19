@@ -10,6 +10,7 @@ import ProductForm from "../components/ProductForm";
 import ProductList from "../components/ProductList";
 import AdminNavbar from "../components/AdminNavbar";
 import "../styles/ProductManager.scss";
+import { logout } from "../features/auth/authSlice";
 
 const ProductManager = () => {
   const dispatch = useDispatch();
@@ -33,9 +34,14 @@ const ProductManager = () => {
     dispatch(deleteProduct(id));
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <>
-      <AdminNavbar />
+      <AdminNavbar onLogout={handleLogout} />
       <div className="product-manager">
         <h2>Product Management...</h2>
 

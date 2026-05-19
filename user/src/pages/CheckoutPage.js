@@ -6,8 +6,13 @@ import {
 } from "../features/checkout/checkoutAPI";
 import { Container, Typography, TextField, Button } from "@mui/material";
 import UserNavbar from "../components/UserNavbar";
+import { logout } from "../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +32,7 @@ export default function CheckoutPage() {
         description: "Order Payment",
         order_id: res.data.razorpayOrderId,
         handler: async function (response) {
-          console.log('response', response)
+          console.log("response", response);
           try {
             // 3. Verify payment
             await verifyPaymentAPI({
@@ -37,7 +42,8 @@ export default function CheckoutPage() {
               orderId: res.data.orderId,
             });
             // 4. Redirect or show success
-            window.location.href = `/order-success/${res.data.orderId}`;
+            // window.location.href = `/order-success/${res.data.orderId}`;
+             navigate("/products");
           } catch (err) {
             alert("Payment verification failed");
           }
@@ -61,9 +67,14 @@ export default function CheckoutPage() {
     }
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <>
-      <UserNavbar />
+      <UserNavbar onLogout={handleLogout} />
       <Container maxWidth="sm" sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>
           Checkout

@@ -1,10 +1,9 @@
-// src/pages/UserLogin.js
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../features/auth/authSlice";
-import { TextField, Button, Typography, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import "../styles/Auth.scss";
+
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 
 export default function UserLogin() {
   const dispatch = useDispatch();
@@ -16,35 +15,115 @@ export default function UserLogin() {
 
   const onSubmit = async (data) => {
     const result = await dispatch(userLogin(data));
+
     if (result.meta.requestStatus === "fulfilled") {
-      navigate("/products"); // redirect to product page
+      navigate("/products");
     }
   };
 
   return (
-    <Container maxWidth="sm" className="auth-container">
-      <Typography variant="h4" gutterBottom>
-        Login
-      </Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          label="Email"
-          {...register("email", { required: true })}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Password"
-          type="password"
-          {...register("password", { required: true })}
-          fullWidth
-          margin="normal"
-        />
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Login
-        </Button>
-      </form>
-      {status === "failed" && <Typography color="error">{error}</Typography>}
-    </Container>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        backgroundImage: 'url("/images/login-bg.jpg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Left Side */}
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backdropFilter: "blur(6px)",
+          bgcolor: "rgba(255,255,255,0.55)",
+        }}
+      >
+        <Container maxWidth="sm">
+          <Box
+            sx={{
+              p: 4,
+              borderRadius: "20px",
+              bgcolor: "rgba(255,255,255,0.88)",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
+            }}
+          >
+            <Typography
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{
+                fontWeight: 700,
+                color: "#7c3aed",
+                mb: 3,
+              }}
+            >
+              User Login
+            </Typography>
+
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <TextField
+                label="Email"
+                fullWidth
+                margin="normal"
+                {...register("email", { required: true })}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "12px",
+                  },
+                }}
+              />
+
+              <TextField
+                label="Password"
+                type="password"
+                fullWidth
+                margin="normal"
+                {...register("password", { required: true })}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "12px",
+                  },
+                }}
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={status === "loading"}
+                sx={{
+                  mt: 3,
+                  py: 1.3,
+                  borderRadius: "12px",
+                  textTransform: "none",
+                  fontWeight: 700,
+                  fontSize: "15px",
+                  background: "linear-gradient(90deg, #6d28d9, #a855f7)",
+
+                  "&:hover": {
+                    background: "linear-gradient(90deg, #5b21b6, #9333ea)",
+                  },
+                }}
+              >
+                {status === "loading" ? "Logging in..." : "Login"}
+              </Button>
+
+              {status === "failed" && (
+                <Typography color="error" align="center" sx={{ mt: 2 }}>
+                  {error}
+                </Typography>
+              )}
+            </form>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Right Side */}
+      <Box sx={{ flex: 1 }} />
+    </Box>
   );
 }
