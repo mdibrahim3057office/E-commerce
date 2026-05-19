@@ -7,7 +7,6 @@ import {
   Paper,
   Typography,
   Box,
-  Stack,
   Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
