@@ -1,0 +1,23 @@
+/* src/pages/Cart.scss */
+.cart-container {
+  margin-top: 2rem;
+
+  .cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .details {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .total {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+}
