@@ -4,7 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
-import { Box, Container, Typography, Button } from "@mui/material";
+import { Box, Container, Button } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const AdminNavbar = ({ onLogout }) => {

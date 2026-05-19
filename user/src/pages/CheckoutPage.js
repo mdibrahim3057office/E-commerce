@@ -7,7 +7,7 @@ import {
 import { Container, Typography, TextField, Button } from "@mui/material";
 import UserNavbar from "../components/UserNavbar";
 import { logout } from "../features/auth/authSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
